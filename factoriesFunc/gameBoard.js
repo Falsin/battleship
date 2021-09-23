@@ -1,7 +1,9 @@
 import ship from "./ship";
 
 function gameBoard() {
-  const shipsArray = [
+  let orientation = 'horizontal';
+
+  let shipsArray = [
     {
       name: 'carrier',
       length: 5,
@@ -24,21 +26,28 @@ function gameBoard() {
     },
   ]
 
-  const newShipsArray = shipsArray.map(elem => {
+  let newShipsArray = shipsArray.map(elem => {
     return {
       ...elem,
       ...ship(elem),
     }
   })
 
-  function placeShips(coord) {
-    let requiredId = newShipsArray.findIndex(elem => {
-      return !elem[coord];
-    });
+  function changeOrientation() {
+    this.orientation = (this.orientation === 'vertical') ? 'horizontal' : 'vertical';
+  }
 
-    if (requiredId !== -1) {
-      let cloneArr = newShipsArray.map(elem => Object.assign({}, elem));
-      cloneArr[requiredId].coord = coord;
+  function placeShips(coord) {
+    let requiredItem = newShipsArray.find(elem => !elem.isPlaced);
+
+    if (orientation === 'horizontal') {
+      if (coord.horizontal + shipsArray.length < 11) {
+        requiredItem.shipPart.forEach((elem, id) => {
+          elem.coord = Object.assign({}, coord, {horizontal: coord.horizontal + id});
+        });
+      } else {
+        return 'Invalid value';
+      }
     }
   }
 
@@ -47,11 +56,5 @@ function gameBoard() {
     newShipsArray,
   }
 }
-
-/* let createGameBoard = gameBoard();
-createGameBoard.placeShips({
-  horizontal: 1,
-  vertical: 'A',
-}) */
 
 export default gameBoard;

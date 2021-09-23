@@ -1,8 +1,8 @@
 import ship from "../factoriesFunc/ship";
 
 describe('give damage', () => {
-  let createShip: {[key: string]: any} = {};
-  let hitPosition: null | number = null;
+  let createShip = {};
+  let hitPosition = null;
 
   beforeAll(() => {
     createShip = ship({

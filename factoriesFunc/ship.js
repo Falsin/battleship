@@ -1,5 +1,6 @@
 function ship(ship) { 
   let shipPart = createShipParts(ship);
+  let isPlaced = false;
 
   return {
     shipPart,
@@ -9,7 +10,8 @@ function ship(ship) {
     isSunk() {
       let hitsCount = shipPart.filter(elem => elem.isDamage).length;
       return hitsCount === shipPart.length;
-    }
+    },
+    isPlaced,
   }
 }
 
@@ -18,7 +20,7 @@ function createShipParts(ship) {
     isDamage: false,
   }
 
-  return new Array(ship.length).fill().map(elem => Object.assign({}, obj));
+  return new Array(ship.length).fill().map(() => Object.assign({}, obj));
 }
 
 export default ship
