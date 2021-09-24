@@ -41,12 +41,19 @@ function gameBoard() {
     let requiredItem = newShipsArray.find(elem => !elem.isPlaced);
 
     if (orientation === 'horizontal') {
-      if (coord.horizontal + shipsArray.length < 11) {
+      if (coord.horizontal + requiredItem.length < 11) {
         requiredItem.shipPart.forEach((elem, id) => {
           elem.coord = Object.assign({}, coord, {horizontal: coord.horizontal + id});
         });
       } else {
         return 'Invalid value';
+      }
+    } else {
+      let maxValue = 'J'.charCodeAt(0);
+      if (coord.vertical.charCodeAt(0) + requiredItem.length <= maxValue) {
+        requiredItem.shipPart.forEach((elem, id) => {
+          elem.coord = Object.assign({}, coord, {vertical: String.fromCharCode( ((coord.vertical).charCodeAt(0) + id)) });
+        });
       }
     }
   }
