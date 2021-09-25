@@ -1,39 +1,23 @@
-/* import ship from "./ship"
+/* function player() {
+  let name;
 
-function player() {
-  const shipsArray = [
-    {
-      name: 'carrier',
-      length: 5,
-    },
-    {
-      name: 'battleship',
-      length: 4,
-    },
-    {
-      name: 'Cruiser',
-      length: 3,
-    },
-    {
-      name: 'submarine',
-      length: 3,
-    },
-    {
-      name: 'destroyer',
-      length: 2,
-    },
-  ]  
+  return {name, setName}
+} */
 
-  const newShipsArray = shipsArray.map(elem => {
-    return {
-      ...elem,
-      ...ship(elem),
+const createHumanPlayer =  (() => {
+  let name; 
+
+  return function () {
+    function setName(selectedName) {
+      name = selectedName;
+      this.name = name;
     }
-  })
 
-  return {
-    newShipsArray
+    return {name, setName}
   }
-}
+})()
 
-console.log(player()) */
+let humanPlayer = createHumanPlayer();
+/* let botPlayer   = player(); */
+
+export {humanPlayer}
