@@ -1,4 +1,4 @@
-import { HashRouter, BrowserRouter, Switch, Route } from "react-router-dom";
+import { HashRouter, Switch, Route } from "react-router-dom";
 import registrationPage from "./pages/registrationPage";
 import gamePage from "./pages/gamePage";
 

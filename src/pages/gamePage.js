@@ -4,8 +4,6 @@ import { humanPlayer } from "../factoriesFunc/player";
 import MainContent from "../components/mainContent";
 
 function gamePage(params) {
-
-  console.log(humanPlayer)
   return (
     <section>
       <Header />

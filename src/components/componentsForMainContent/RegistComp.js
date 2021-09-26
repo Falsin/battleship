@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { humanPlayer } from "../../factoriesFunc/player";
 
-const WrapperForRegist = styled.div`
+const Wrapper = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -32,10 +32,10 @@ const WrapperForRegist = styled.div`
 
 export default function Regist(props) {
   return (
-    <WrapperForRegist>
+    <Wrapper>
       <h3>Enter player name:</h3>
       <input placeholder='Combat' onBlur={(e) => humanPlayer.setName(e.target.value)} />
       <Link to='/gamePage'>Start game</Link>
-    </WrapperForRegist>
+    </Wrapper>
   )
 }
