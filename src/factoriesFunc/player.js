@@ -17,7 +17,15 @@ const createHumanPlayer =  (() => {
   }
 })()
 
+function createBotPlayer() {
+  function makeMove() {
+    /*something */
+  }
+
+  return {makeMove}
+}
+
 let humanPlayer = createHumanPlayer();
 /* let botPlayer   = player(); */
 
-export {humanPlayer}
+export {humanPlayer, createBotPlayer}
