@@ -41,10 +41,11 @@ function gameBoard() {
     let requiredItem = newShipsArray.find(elem => !elem.isPlaced);
 
     if (orientation === 'horizontal') {
-      if (coord.horizontal + requiredItem.length < 11) {
+      if (coord.vertical + requiredItem.length < 11) {
         requiredItem.shipPart.forEach((elem, id) => {
-          elem.coord = Object.assign({}, coord, {horizontal: coord.horizontal + id});
+          elem.coord = Object.assign({}, coord, {vertical: coord.vertical + id});
         });
+        return requiredItem;
       } else {
         return 'Invalid value';
       }
@@ -52,7 +53,7 @@ function gameBoard() {
       let maxValue = 'J'.charCodeAt(0);
       if (coord.vertical.charCodeAt(0) + requiredItem.length <= maxValue) {
         requiredItem.shipPart.forEach((elem, id) => {
-          elem.coord = Object.assign({}, coord, {vertical: String.fromCharCode( ((coord.vertical).charCodeAt(0) + id)) });
+          elem.coord = Object.assign({}, coord, {horizontal: String.fromCharCode( ((coord.horizontal).charCodeAt(0) + id)) });
         });
       }
     }

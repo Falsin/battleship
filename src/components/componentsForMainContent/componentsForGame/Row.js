@@ -8,7 +8,7 @@ const Wrapper = styled.div`
 
 export default function Row(props) {
   function createCells() {
-    return new Array(props.countCells).fill().map(() => <Cell player={props.player} changePlayer={props.setPlayer} key={uniqid()} />)
+    return new Array(props.countCells).fill().map((elem, id) => <Cell vertical={++id} horizontal={props.horizontal} key={uniqid()} />)
   }
 
   return (
