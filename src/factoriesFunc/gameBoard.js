@@ -37,7 +37,7 @@ function gameBoard() {
     this.orientation = (this.orientation === 'vertical') ? 'horizontal' : 'vertical';
   }
 
-  function placeShips(coord) {
+  /* function placeShips(coord, context) {
     let requiredItem = newShipsArray.find(elem => !elem.isPlaced);
 
     if (orientation === 'horizontal') {
@@ -45,6 +45,7 @@ function gameBoard() {
         requiredItem.shipPart.forEach((elem, id) => {
           elem.coord = Object.assign({}, coord, {vertical: coord.vertical + id});
         });
+        requiredItem.isPlaced = true;
         return requiredItem;
       } else {
         return 'Invalid value';
@@ -56,8 +57,19 @@ function gameBoard() {
           elem.coord = Object.assign({}, coord, {horizontal: String.fromCharCode( ((coord.horizontal).charCodeAt(0) + id)) });
         });
       }
+    } */
+
+    function placeShips(index) {
+      let findElem = newShipsArray.find(elem => {
+        return !elem.isPlaced;
+      })
+
+      if (orientation === 'horizontal') {
+        findElem.shipPart.forEach((elem, id) => {
+          elem.coord = Object.assign({}, {coord: index + id});
+        })
+      }
     }
-  }
 
   return {
     placeShips,
