@@ -12,29 +12,6 @@ const Wrapper = styled.div`
 
 
 export default function Board(props) {
-
-/*   const [board, setBoard] = useState(gameBoard())
-  const [player, setPlayer] = useState(props.player);
-  const [isReady, setReadyStatus] = useState(false);
-  const [selectedCells, setSelectedCells] = useState([]);
-  const [[countRows, countCells], setCountElements] = useState([10, 10]); */
-
-/*   const state = {
-    objStatus: {isReady, setReadyStatus},
-    objBoard: {board, setBoard},
-    objPlayer: {player, setPlayer},
-    cells: {selectedCells, setSelectedCells},
-    countElements: {countRows, countCells, setCountElements},
-  } */
-
-  /* function createBoardTemplate(countRows, countCells) {
-    return new Array(countRows).fill()
-    .map((elem, id) => {
-      let horizontalCoord = String.fromCharCode('A'.charCodeAt(0) + id);
-      return <Row horizontal={horizontalCoord} key={uniqid()} state={state} />
-    });
-  } */
-
   const [board, setBoard] = useState(gameBoard());
 
   function createBoardTemplate(countRows) {
@@ -49,38 +26,3 @@ export default function Board(props) {
     </div>
   )
 }
-
-/* let playersContext = React.createContext(null);
-
-export default function Board(props) {
-
-  const [board, setBoard] = useState(gameBoard())
-  const [player, setPlayer] = useState(props.player);
-  const [isReady, setReadyStatus] = useState(false);
-  const [selectedCells, setSelectedCells] = useState([]);
-  const [[countRows, countCells], setCountElements] = useState([10, 10])
-
-  let objStatus     = {isReady, setReadyStatus};
-  let objBoard      = {board, setBoard};
-  let objPlayer     = {player, setPlayer};
-  let cells         = {selectedCells, setSelectedCells};
-  let countElements = {countRows, countCells, setCountElements};
-
-  function createBoardTemplate(countRows, countCells) {
-    return new Array(countRows).fill()
-    .map((elem, id) => {
-      let horizontalCoord = String.fromCharCode('A'.charCodeAt(0) + id);
-      return <Row horizontal={horizontalCoord} key={uniqid()} countCells={countCells} />
-    });
-  }
-
-  return (
-    <playersContext.Provider value={{user: objPlayer, status: objStatus, board: objBoard, selectedCells: cells, countItems: countElements, changeContext: () => {}}}>
-      <div>
-        {createBoardTemplate(countRows, countCells).map(elem => elem)}
-      </div>
-    </playersContext.Provider>
-  )
-}
-
-export { playersContext }; */

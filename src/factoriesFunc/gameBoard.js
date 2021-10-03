@@ -2,6 +2,8 @@ import ship from "./ship";
 
 function gameBoard() {
   let orientation = 'horizontal';
+  let selectedCells = [];
+  let hoveredCells = [];
 
   let shipsArray = [
     {
@@ -37,43 +39,35 @@ function gameBoard() {
     this.orientation = (this.orientation === 'vertical') ? 'horizontal' : 'vertical';
   }
 
-  /* function placeShips(coord, context) {
-    let requiredItem = newShipsArray.find(elem => !elem.isPlaced);
+  function placeShips(index) {
+    let findElem = newShipsArray.find(elem => !elem.isPlaced)
 
     if (orientation === 'horizontal') {
-      if (coord.vertical + requiredItem.length < 11) {
-        requiredItem.shipPart.forEach((elem, id) => {
-          elem.coord = Object.assign({}, coord, {vertical: coord.vertical + id});
-        });
-        requiredItem.isPlaced = true;
-        return requiredItem;
-      } else {
-        return 'Invalid value';
-      }
-    } else {
-      let maxValue = 'J'.charCodeAt(0);
-      if (coord.vertical.charCodeAt(0) + requiredItem.length <= maxValue) {
-        requiredItem.shipPart.forEach((elem, id) => {
-          elem.coord = Object.assign({}, coord, {horizontal: String.fromCharCode( ((coord.horizontal).charCodeAt(0) + id)) });
-        });
-      }
-    } */
-
-    function placeShips(index) {
-      let findElem = newShipsArray.find(elem => {
-        return !elem.isPlaced;
+      findElem.shipPart.forEach((elem, id) => {
+        elem.coord = index + id;
+        selectedCells.push(index + id)
       })
-
-      if (orientation === 'horizontal') {
-        findElem.shipPart.forEach((elem, id) => {
-          elem.coord = Object.assign({}, {coord: index + id});
-        })
-      }
     }
+  }
+
+  function checkCellAssing(coord) {
+    return !selectedCells.includes(coord);
+  }
+
+  function addCellsIntoHoveredCells(ship, index) {
+    this.hoveredCells = [];
+
+    ship.shipPart.forEach((elem, id) => {
+      this.hoveredCells.push(index + id)
+    });
+  }
 
   return {
     placeShips,
+    checkCellAssing,
     newShipsArray,
+    addCellsIntoHoveredCells,
+    hoveredCells
   }
 }
 
