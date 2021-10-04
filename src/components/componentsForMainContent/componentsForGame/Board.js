@@ -3,6 +3,7 @@ import uniqid from 'uniqid';
 import gameBoard from '../../../factoriesFunc/gameBoard';
 import styled from "styled-components";
 import Cell from './Cell';
+import { useEffect } from 'react/cjs/react.development';
 
 const Wrapper = styled.div`
   display: grid;

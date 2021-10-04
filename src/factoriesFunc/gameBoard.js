@@ -4,6 +4,7 @@ function gameBoard() {
   let orientation = 'horizontal';
   let selectedCells = [];
   let hoveredCells = [];
+  let isReady = false;
 
   let shipsArray = [
     {
@@ -69,7 +70,8 @@ function gameBoard() {
     newShipsArray,
     addCellsIntoHoveredCells,
     hoveredCells,
-    selectedCells
+    selectedCells,
+    isReady,
   }
 }
 

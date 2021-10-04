@@ -2,15 +2,9 @@ import React, {useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Square = styled.div`
-  //background:  ${props => props.status.key ? 'gray' : `rgb(66, 66, 255)`};
   background: ${(props) => {
-    if (props.error.key) {
-      return 'red';
-    } else if (props.status.key || props.hover.key) {
-      return 'gray';
-    } else {
-      return `rgb(66, 66, 255)`;
-    }
+    return  (props.error.key) ? 'red' : 
+            (props.status.key || props.hover.key) ? 'gray' : `rgb(66, 66, 255)`
   }};
   border: solid white 1px;
 `;
@@ -18,102 +12,116 @@ const Square = styled.div`
 const Cell = React.memo(CreateCell, comprasionOfProps);
 
 function CreateCell (props) {
-
+  //console.log('work')
     const [isSelected, setIsSelected] = useState(false);
-    const [isError, setIsError] = useState(false);
-    const [isHover, setIsHover] = useState(false);
+    const [isError, setIsError]       = useState(false);
+    const [isHover, setIsHover]       = useState(false);
 
-    useEffect(() => {
+  useEffect(() => {
+    const array = props.state.board.newShipsArray;
+    const board = props.state.board;
 
-      const array = props.state.board.newShipsArray;
-
-      if (props.state.board.hoveredCells.includes(props.index)) {
-        if (props.state.board.selectedCells.includes(props.index)) {
-          setIsError(true);
-        } else {
-          setIsHover(true);
-        }
+    if (board.hoveredCells.includes(props.index)) {
+      if (board.selectedCells.includes(props.index)) {
+        setIsError(true);
       } else {
-        if (isHover) {
-          setIsHover(false);
-        }
-        setIsError(false);
+        setIsHover(true);
+      }
+    } else {
+      if (isHover) {
+        setIsHover(false);
+      }
+      setIsError(false);
 
-        for (const item of array) {
-          if (item.isPlaced) {
-            let condition = item.shipPart.find(elem => elem.coord === props.index)
+      for (const item of array) {
+        if (item.isPlaced) {
+          let condition = item.shipPart.find(elem => elem.coord === props.index)
       
-            if (condition) {
-              setIsSelected(true);
-            }
+          if (condition) {
+            setIsSelected(true);
           }
         }
       }
-    })
+    }
+  })
   
-    function arrangeShips() {
-      const cloneBoard = Object.assign({}, props.state.board);
-  
+  function arrangeShips() {
+    let cloneBoard = Object.assign({}, props.state.board);
+    let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
+
+    if (findElem) {
       if (cloneBoard.checkCellAssing(props.index)) {
-        let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
   
         let remainderOfDivision = props.index % 10;
-  
+    
         if (remainderOfDivision + findElem.length <= 10) {
           cloneBoard.placeShips(props.index);
           findElem.isPlaced = true;
+
+          let findItem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
+
+          if (!findItem) {
+            cloneBoard.isReady = true;
+          }
+
           props.state.setBoard(cloneBoard);
         }
       }
+    } 
+  }
+
+  function shipHover() {
+    let cloneBoard = Object.assign({}, props.state.board);
+    let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
+
+    let remainderOfDivision = props.index % 10;
+    if (remainderOfDivision + findElem.length <= 10) {
+      cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
+      props.state.setBoard(cloneBoard);
     }
 
-    function shipHover() {
-      const cloneBoard = Object.assign({}, props.state.board);
-      let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
-
-      if (cloneBoard.checkCellAssing(props.index)) {
-        console.log('work1');
-        let remainderOfDivision = props.index % 10;
-
-        if (remainderOfDivision + findElem.length <= 10) {
-          cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
-      
-          props.state.setBoard(cloneBoard);
-        }
-      } else {
-        console.log('work2')
+    /* if (cloneBoard.checkCellAssing(props.index)) {
+      let remainderOfDivision = props.index % 10;
+  
+      if (remainderOfDivision + findElem.length <= 10) {
         cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
-        //setIsError(true);
         props.state.setBoard(cloneBoard);
       }
-      
-    }
+    } else {
+      cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
+      props.state.setBoard(cloneBoard);
+    } */
+  }
   
     return (
-      <Square onClick={() => arrangeShips()} onMouseEnter={() => shipHover()}
-      
+      <Square 
+      onClick={() => props.state.board.isReady ? null : arrangeShips()} 
+      onMouseEnter={() => props.state.board.isReady ? null : shipHover()}
       status={{key: isSelected}} error={{key: isError}} hover={{key: isHover}}>{props.index}</Square>
     )
 }
 
 function comprasionOfProps(prevProps, nextProps) {
-  /* const array = nextProps.state.board.newShipsArray;
+  if (nextProps.state.board.hoveredCells.includes(nextProps.index) || prevProps.state.board.hoveredCells.includes(nextProps.index)) {
+    return false;
+  } else if (prevProps.state.board.isReady !== nextProps.state.board.isReady) {
+    return false
+  } else {
+    const array = nextProps.state.board.newShipsArray;
 
-  for (const item of array) {
-    if (item.isPlaced) {
-      let condition = item.shipPart.find(elem => elem.coord === nextProps.index)
+    for (const item of array) {
+      if (item.isPlaced) {
+        let condition = item.shipPart.find(elem => elem.coord === nextProps.index)
 
-      if (condition) {
-        return false;
+        if (condition) {
+          return false;
+        }
       }
     }
   }
-
-  return true; */
-  return !(prevProps !== nextProps);
-  /* if (prevProps !== nextProps) {
-    reut
-  } */
+  return true;
 }
 
 export default Cell;
+
+//было 124 строчки
