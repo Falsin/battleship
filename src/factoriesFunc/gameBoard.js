@@ -40,6 +40,7 @@ function gameBoard() {
   }
 
   function placeShips(index) {
+    this.hoveredCells = [];
     let findElem = newShipsArray.find(elem => !elem.isPlaced)
 
     if (orientation === 'horizontal') {
@@ -67,7 +68,8 @@ function gameBoard() {
     checkCellAssing,
     newShipsArray,
     addCellsIntoHoveredCells,
-    hoveredCells
+    hoveredCells,
+    selectedCells
   }
 }
 

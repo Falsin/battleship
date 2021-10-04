@@ -6,7 +6,7 @@ const Square = styled.div`
   background: ${(props) => {
     if (props.error.key) {
       return 'red';
-    } else if (props.status.key) {
+    } else if (props.status.key || props.hover.key) {
       return 'gray';
     } else {
       return `rgb(66, 66, 255)`;
@@ -21,20 +21,28 @@ function CreateCell (props) {
 
     const [isSelected, setIsSelected] = useState(false);
     const [isError, setIsError] = useState(false);
-  
-    //console.log('work')
-  
+    const [isHover, setIsHover] = useState(false);
+
     useEffect(() => {
+
+      const array = props.state.board.newShipsArray;
+
       if (props.state.board.hoveredCells.includes(props.index)) {
-        setIsError(true);
+        if (props.state.board.selectedCells.includes(props.index)) {
+          setIsError(true);
+        } else {
+          setIsHover(true);
+        }
       } else {
+        if (isHover) {
+          setIsHover(false);
+        }
         setIsError(false);
-        const array = props.state.board.newShipsArray;
-  
+
         for (const item of array) {
           if (item.isPlaced) {
             let condition = item.shipPart.find(elem => elem.coord === props.index)
-    
+      
             if (condition) {
               setIsSelected(true);
             }
@@ -60,37 +68,36 @@ function CreateCell (props) {
     }
 
     function shipHover() {
-        //console.log('enter')
       const cloneBoard = Object.assign({}, props.state.board);
       let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
 
       if (cloneBoard.checkCellAssing(props.index)) {
+        console.log('work1');
         let remainderOfDivision = props.index % 10;
-  
+
+        if (remainderOfDivision + findElem.length <= 10) {
+          cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
+      
+          props.state.setBoard(cloneBoard);
+        }
       } else {
+        console.log('work2')
         cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
-        props.state.setBoard(cloneBoard)
+        //setIsError(true);
+        props.state.setBoard(cloneBoard);
       }
       
     }
-
-/*     function leaveCells() {
-      const cloneBoard = Object.assign({}, props.state.board);
-      cloneBoard.hoveredCells = [];
-      props.state.setBoard(cloneBoard)
-      console.log('leave')
-    } */
   
     return (
       <Square onClick={() => arrangeShips()} onMouseEnter={() => shipHover()}
-      /* onMouseLeave={() => leaveCells()} */
       
-      status={{key: isSelected}} error={{key: isError}}>{props.index}</Square>
+      status={{key: isSelected}} error={{key: isError}} hover={{key: isHover}}>{props.index}</Square>
     )
 }
 
 function comprasionOfProps(prevProps, nextProps) {
-  const array = nextProps.state.board.newShipsArray;
+  /* const array = nextProps.state.board.newShipsArray;
 
   for (const item of array) {
     if (item.isPlaced) {
@@ -102,7 +109,11 @@ function comprasionOfProps(prevProps, nextProps) {
     }
   }
 
-  return true;
+  return true; */
+  return !(prevProps !== nextProps);
+  /* if (prevProps !== nextProps) {
+    reut
+  } */
 }
 
 export default Cell;
