@@ -6,9 +6,18 @@ import Cell from './Cell';
 import { useEffect } from 'react/cjs/react.development';
 
 const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(10, 4vmin);
-  grid-template-rows: repeat(10, 4vmin);  
+  display: flex;
+  align-items: center;
+
+  div {
+    display: grid;
+    grid-template-columns: repeat(10, 4vmin);
+    grid-template-rows: repeat(10, 4vmin); 
+  }
+
+  button {
+    margin-right: 2vmin;
+  }
 `;
 
 
@@ -19,11 +28,14 @@ export default function Board(props) {
     return new Array(countRows).fill().map((elem, id) => <Cell key={id} index={id} state={{board, setBoard}} />);
   }
 
+  console.log(props)
+
   return (
-    <div>
-      <Wrapper>
+    <Wrapper>
+      {(props.isHuman) ? <button>axis: X</button> : null}
+      <div>
         {createBoardTemplate(100)}
-      </Wrapper>
-    </div>
+      </div>
+    </Wrapper>
   )
 }

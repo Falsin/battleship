@@ -73,24 +73,12 @@ function CreateCell (props) {
   function shipHover() {
     let cloneBoard = Object.assign({}, props.state.board);
     let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
-
     let remainderOfDivision = props.index % 10;
+
     if (remainderOfDivision + findElem.length <= 10) {
       cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
       props.state.setBoard(cloneBoard);
     }
-
-    /* if (cloneBoard.checkCellAssing(props.index)) {
-      let remainderOfDivision = props.index % 10;
-  
-      if (remainderOfDivision + findElem.length <= 10) {
-        cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
-        props.state.setBoard(cloneBoard);
-      }
-    } else {
-      cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
-      props.state.setBoard(cloneBoard);
-    } */
   }
   
     return (
@@ -123,5 +111,3 @@ function comprasionOfProps(prevProps, nextProps) {
 }
 
 export default Cell;
-
-//было 124 строчки
