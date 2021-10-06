@@ -12,7 +12,6 @@ const Square = styled.div`
 const Cell = React.memo(CreateCell, comprasionOfProps);
 
 function CreateCell (props) {
-  //console.log('work')
     const [isSelected, setIsSelected] = useState(false);
     const [isError, setIsError]       = useState(false);
     const [isHover, setIsHover]       = useState(false);
@@ -47,44 +46,29 @@ function CreateCell (props) {
   
   function arrangeShips() {
     let cloneBoard = Object.assign({}, props.state.board);
+    cloneBoard.placeShips(props.index);
+
     let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
-
-    if (findElem) {
-      if (cloneBoard.checkCellAssing(props.index)) {
-  
-        let remainderOfDivision = props.index % 10;
     
-        if (remainderOfDivision + findElem.length <= 10) {
-          cloneBoard.placeShips(props.index);
-          findElem.isPlaced = true;
+    if (!findElem) {
+      cloneBoard.isReady = true;
+    }
 
-          let findItem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
-
-          if (!findItem) {
-            cloneBoard.isReady = true;
-          }
-
-          props.state.setBoard(cloneBoard);
-        }
-      }
-    } 
+    props.state.setBoard(cloneBoard);
   }
 
   function shipHover() {
     let cloneBoard = Object.assign({}, props.state.board);
     let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
-    let remainderOfDivision = props.index % 10;
 
-    if (remainderOfDivision + findElem.length <= 10) {
-      cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
-      props.state.setBoard(cloneBoard);
-    }
+    cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
+    props.state.setBoard(cloneBoard);
   }
   
     return (
       <Square 
-      onClick={() => props.state.board.isReady ? null : arrangeShips()} 
-      onMouseEnter={() => props.state.board.isReady ? null : shipHover()}
+      onClick={() => props.state.board.isReady || !props.isHuman ? null : arrangeShips()} 
+      onMouseEnter={() => props.state.board.isReady || !props.isHuman ? null : shipHover()}
       status={{key: isSelected}} error={{key: isError}} hover={{key: isHover}}>{props.index}</Square>
     )
 }
@@ -94,6 +78,8 @@ function comprasionOfProps(prevProps, nextProps) {
     return false;
   } else if (prevProps.state.board.isReady !== nextProps.state.board.isReady) {
     return false
+  } else if (prevProps.state.board.orientation !== nextProps.state.board.orientation) {
+    return false;
   } else {
     const array = nextProps.state.board.newShipsArray;
 

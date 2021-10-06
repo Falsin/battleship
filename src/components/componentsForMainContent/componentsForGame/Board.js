@@ -20,19 +20,20 @@ const Wrapper = styled.div`
   }
 `;
 
-
 export default function Board(props) {
   const [board, setBoard] = useState(gameBoard());
 
   function createBoardTemplate(countRows) {
-    return new Array(countRows).fill().map((elem, id) => <Cell key={id} index={id} state={{board, setBoard}} />);
+    return new Array(countRows).fill().map((elem, id) => <Cell key={id} index={id} state={{board, setBoard}} isHuman={props.isHuman} />);
   }
-
-  console.log(props)
 
   return (
     <Wrapper>
-      {(props.isHuman) ? <button>axis: X</button> : null}
+      {(props.isHuman) ? <button onClick={() => {
+        let cloneState = Object.assign({}, board);
+        cloneState.changeOrientation();
+        setBoard(cloneState);
+      }}>axis: {board.orientation === 'horizontal' ? 'X' : 'Y'}</button> : null}
       <div>
         {createBoardTemplate(100)}
       </div>

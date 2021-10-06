@@ -1,10 +1,26 @@
-/* function player() {
-  let name;
+import gameBoard from "./gameBoard";
 
-  return {name, setName}
-} */
+function Player() {
+  const prototype = gameBoard();
+  let isReady = false;
 
-const createHumanPlayer =  (() => {
+  return Object.assign(Object.create(prototype), isReady);
+}
+
+function Robot() {
+  const prototype = Player();
+
+  /*some funcs */
+
+  return Object.assign(Object.create(prototype), /*some props */);
+}
+
+const human = Player();
+const bot = Robot()
+
+
+
+/* const createHumanPlayer =  (() => {
   let name; 
 
   return function () {
@@ -19,13 +35,11 @@ const createHumanPlayer =  (() => {
 
 function createBotPlayer() {
   function makeMove() {
-    /*something */
   }
 
   return {makeMove}
 }
 
 let humanPlayer = createHumanPlayer();
-/* let botPlayer   = player(); */
 
-export {humanPlayer, createBotPlayer}
+export {humanPlayer, createBotPlayer} */

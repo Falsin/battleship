@@ -1,12 +1,12 @@
 import ship from "./ship";
 
 function gameBoard() {
-  let orientation = 'horizontal';
-  let selectedCells = [];
-  let hoveredCells = [];
-  let isReady = false;
+  const orientation = 'horizontal';
+  const selectedCells = [];
+  const hoveredCells = [];
+  const isReady = false;
 
-  let shipsArray = [
+  const shipsArray = [
     {
       name: 'carrier',
       length: 5,
@@ -37,41 +37,48 @@ function gameBoard() {
   })
 
   function changeOrientation() {
-    this.orientation = (this.orientation === 'vertical') ? 'horizontal' : 'vertical';
+    return this.orientation = (this.orientation === 'vertical') ? 'horizontal' : 'vertical';
   }
 
   function placeShips(index) {
-    this.hoveredCells = [];
-    let findElem = newShipsArray.find(elem => !elem.isPlaced)
+    let condition = this.selectedCells.find(elem => elem === index);
+    let findElem = newShipsArray.find(elem => !elem.isPlaced);
 
-    if (orientation === 'horizontal') {
-      findElem.shipPart.forEach((elem, id) => {
-        elem.coord = index + id;
-        selectedCells.push(index + id)
-      })
+    if (condition === undefined) {
+      const newArr = findElem.shipPart.map((elem, id) => elem.coord = this.hoveredCells[id]);
+      this.selectedCells.push(...newArr);
+      findElem.isPlaced = true;
     }
-  }
-
-  function checkCellAssing(coord) {
-    return !selectedCells.includes(coord);
+    this.hoveredCells = [];
   }
 
   function addCellsIntoHoveredCells(ship, index) {
     this.hoveredCells = [];
 
-    ship.shipPart.forEach((elem, id) => {
-      this.hoveredCells.push(index + id)
-    });
+    if (this.orientation === 'horizontal' && index % 10 + ship.length <= 10) {
+      ship.shipPart.forEach((elem, id) => {
+        this.hoveredCells.push(index + id)
+      });
+    } else if (this.orientation === 'vertical' && index + (ship.length * 10 - 10) <= 99) {
+      ship.shipPart.forEach((elem, id) => {
+        this.hoveredCells.push(index + (id * 10))
+      });
+    }
+  }
+
+  function sayHello(params) {
+    return 'Hello!'
   }
 
   return {
     placeShips,
-    checkCellAssing,
     newShipsArray,
     addCellsIntoHoveredCells,
     hoveredCells,
     selectedCells,
     isReady,
+    changeOrientation,
+    orientation,
   }
 }
 
