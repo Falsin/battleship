@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { humanPlayer } from "../../factoriesFunc/player";
+import { Player, Robot } from "../../factoriesFunc/player";
 
 const Wrapper = styled.div`
   flex-grow: 1;
@@ -34,7 +34,9 @@ export default function Regist(props) {
   return (
     <Wrapper>
       <h3>Enter player name:</h3>
-      <input placeholder='Combat' onBlur={(e) => humanPlayer.setName(e.target.value)} />
+      <input placeholder='Combat' onBlur={(e) => {
+        Player().setName(e.target.value)}
+      } />
       <Link to='/gamePage'>Start game</Link>
     </Wrapper>
   )

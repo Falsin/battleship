@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import uniqid from 'uniqid';
-import gameBoard from '../../../factoriesFunc/gameBoard';
+//import gameBoard from '../../../factoriesFunc/gameBoard';
 import styled from "styled-components";
 import Cell from './Cell';
-import { useEffect } from 'react/cjs/react.development';
+import { useEffect } from 'react';
+import cloneObj from '../../../factoriesFunc/cloneObj';
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,14 +22,30 @@ const Wrapper = styled.div`
 `;
 
 export default function Board(props) {
-  const [board, setBoard] = useState(gameBoard());
+  const state = {
+    player: props.player, 
+    func: props.func
+  }
 
   function createBoardTemplate(countRows) {
-    return new Array(countRows).fill().map((elem, id) => <Cell key={id} index={id} state={{board, setBoard}} isHuman={props.isHuman} />);
+    return new Array(countRows).fill().map((elem, id) => {
+      return <Cell key={id} index={id} state={state} isHuman={props.isHuman} />
+    });
   }
 
   return (
     <Wrapper>
+      {(props.isHuman) ? <button onClick={() => {
+        let cloneState = cloneObj(props.player);
+        cloneState.changeOrientation();
+        props.func(cloneState);
+      }}>axis: {props.player.orientation === 'horizontal' ? 'X' : 'Y'}</button> : null}
+      <div>
+        {createBoardTemplate(100)}
+      </div>
+    </Wrapper>
+  
+   /*  <Wrapper>
       {(props.isHuman) ? <button onClick={() => {
         let cloneState = Object.assign({}, board);
         cloneState.changeOrientation();
@@ -37,6 +54,6 @@ export default function Board(props) {
       <div>
         {createBoardTemplate(100)}
       </div>
-    </Wrapper>
+    </Wrapper> */
   )
 }

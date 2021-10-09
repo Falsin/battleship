@@ -1,5 +1,8 @@
 import React, {useEffect, useState } from "react";
 import styled from "styled-components";
+import cloneObj from "../../../factoriesFunc/cloneObj";
+
+
 
 const Square = styled.div`
   background: ${(props) => {
@@ -12,26 +15,28 @@ const Square = styled.div`
 const Cell = React.memo(CreateCell, comprasionOfProps);
 
 function CreateCell (props) {
-    const [isSelected, setIsSelected] = useState(false);
-    const [isError, setIsError]       = useState(false);
-    const [isHover, setIsHover]       = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
+  const [isError, setIsError]       = useState(false);
+  const [isHover, setIsHover]       = useState(false);
+
+  //console.log('work')
+
+  const array = props.state.player.newShipsArray;
+  const player = props.state.player;
 
   useEffect(() => {
-    const array = props.state.board.newShipsArray;
-    const board = props.state.board;
-
-    if (board.hoveredCells.includes(props.index)) {
-      if (board.selectedCells.includes(props.index)) {
-        setIsError(true);
-      } else {
+    if (player.hoveredCells.cellsArray.includes(props.index)) {
+      //console.log('work2')
+      if (player.hoveredCells.isValid) {
         setIsHover(true);
+        setIsError(false);
+      } else {
+        setIsError(true);
       }
     } else {
-      if (isHover) {
-        setIsHover(false);
-      }
+      setIsHover(false);
       setIsError(false);
-
+      
       for (const item of array) {
         if (item.isPlaced) {
           let condition = item.shipPart.find(elem => elem.coord === props.index)
@@ -43,45 +48,55 @@ function CreateCell (props) {
       }
     }
   })
-  
+
   function arrangeShips() {
-    let cloneBoard = Object.assign({}, props.state.board);
+    //let cloneBoard = Object.assign(Object.create(Object.getPrototypeOf(props.state.player)), props.state.player);
+    let cloneBoard = cloneObj(props.state.player);
     cloneBoard.placeShips(props.index);
+
+    //console.log()
 
     let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
     
     if (!findElem) {
       cloneBoard.isReady = true;
     }
-
-    props.state.setBoard(cloneBoard);
+    props.state.func(cloneBoard);
   }
 
   function shipHover() {
-    let cloneBoard = Object.assign({}, props.state.board);
+    let cloneBoard = cloneObj(props.state.player);
+    
     let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
 
     cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
-    props.state.setBoard(cloneBoard);
+    console.log(cloneBoard)
+    props.state.func(cloneBoard);
   }
-  
-    return (
-      <Square 
-      onClick={() => props.state.board.isReady || !props.isHuman ? null : arrangeShips()} 
-      onMouseEnter={() => props.state.board.isReady || !props.isHuman ? null : shipHover()}
-      status={{key: isSelected}} error={{key: isError}} hover={{key: isHover}}>{props.index}</Square>
-    )
+
+  return (
+    <Square 
+    onClick={() => player.isReady || !props.isHuman ? null : arrangeShips()} 
+    onMouseEnter={() => player.isReady || !props.isHuman ? null : shipHover()}
+    status={{key: isSelected}} error={{key: isError}} hover={{key: isHover}}>{props.index}</Square>
+  )
 }
 
 function comprasionOfProps(prevProps, nextProps) {
-  if (nextProps.state.board.hoveredCells.includes(nextProps.index) || prevProps.state.board.hoveredCells.includes(nextProps.index)) {
+  //return false;
+  const nextPlayer = nextProps.state.player;
+  const prevPlayer = prevProps.state.player;
+
+  if (prevPlayer.hoveredCells.cellsArray.includes(nextProps.index) || nextPlayer.hoveredCells.cellsArray.includes(nextProps.index)) {
     return false;
-  } else if (prevProps.state.board.isReady !== nextProps.state.board.isReady) {
+  } else if (prevPlayer.isReady !== nextPlayer.isReady) {
     return false
-  } else if (prevProps.state.board.orientation !== nextProps.state.board.orientation) {
+  } else if (prevPlayer.orientation !== nextPlayer.orientation) {
+    return false;
+  } else if (sumNumbersInArray(prevPlayer.selectedCells) !== sumNumbersInArray(nextPlayer.selectedCells)) {
     return false;
   } else {
-    const array = nextProps.state.board.newShipsArray;
+    const array = prevPlayer.newShipsArray;
 
     for (const item of array) {
       if (item.isPlaced) {
@@ -94,6 +109,10 @@ function comprasionOfProps(prevProps, nextProps) {
     }
   }
   return true;
+}
+
+function sumNumbersInArray(array) {
+  return array.reduce((prevVal, currVal) => prevVal + currVal, 0)
 }
 
 export default Cell;

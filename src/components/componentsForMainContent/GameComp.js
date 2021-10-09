@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Board from './componentsForGame/Board'
-import { humanPlayer, createBotPlayer } from "../../factoriesFunc/player";
+import { Player, Robot } from "../../factoriesFunc/player";
+import { useState } from "react";
 
 const Wrapper = styled.div`
   #gameBoards {
@@ -10,11 +11,14 @@ const Wrapper = styled.div`
 `;
 
 export default function Game() {
+  const [humanPlayer, setHumanPlayer] = useState(Player());
+  const [botPlayer, setBotPlayer] = useState(Robot());
+
   return (
     <Wrapper>
       <div id='gameBoards'>
-        <Board player={humanPlayer} isHuman />
-        <Board player={createBotPlayer()} />
+        <Board player={humanPlayer} func={setHumanPlayer} isHuman />
+        <Board player={botPlayer} func={setBotPlayer} />
       </div>
     </Wrapper>
   )

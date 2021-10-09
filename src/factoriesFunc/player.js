@@ -1,45 +1,33 @@
 import gameBoard from "./gameBoard";
 
-function Player() {
+function templateObjForPlayers() {
   const prototype = gameBoard();
-  let isReady = false;
+  const isReady = false;
 
-  return Object.assign(Object.create(prototype), isReady);
+  return Object.assign(Object.create(prototype), {isReady});
 }
 
-function Robot() {
-  const prototype = Player();
-
-  /*some funcs */
-
-  return Object.assign(Object.create(prototype), /*some props */);
-}
-
-const human = Player();
-const bot = Robot()
-
-
-
-/* const createHumanPlayer =  (() => {
-  let name; 
+const Player = (() => {
+  let savedName = null;
 
   return function () {
+    const name = savedName;
+    const prototype = templateObjForPlayers();
+
     function setName(selectedName) {
-      name = selectedName;
-      this.name = name;
+      savedName = selectedName;
+      this.name = selectedName;
     }
 
-    return {name, setName}
+    return Object.assign(Object.create(prototype), {name, setName});
   }
 })()
 
-function createBotPlayer() {
-  function makeMove() {
-  }
+const Robot = () => {
+  const prototype = templateObjForPlayers();
+  const name = 'robot'
 
-  return {makeMove}
+  return Object.assign(Object.create(prototype), {name});
 }
 
-let humanPlayer = createHumanPlayer();
-
-export {humanPlayer, createBotPlayer} */
+export { Player, Robot }
