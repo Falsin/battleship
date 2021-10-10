@@ -2,8 +2,6 @@ import React, {useEffect, useState } from "react";
 import styled from "styled-components";
 import cloneObj from "../../../factoriesFunc/cloneObj";
 
-
-
 const Square = styled.div`
   background: ${(props) => {
     return  (props.error.key) ? 'red' : 
@@ -19,14 +17,11 @@ function CreateCell (props) {
   const [isError, setIsError]       = useState(false);
   const [isHover, setIsHover]       = useState(false);
 
-  //console.log('work')
-
   const array = props.state.player.newShipsArray;
   const player = props.state.player;
 
   useEffect(() => {
     if (player.hoveredCells.cellsArray.includes(props.index)) {
-      //console.log('work2')
       if (player.hoveredCells.isValid) {
         setIsHover(true);
         setIsError(false);
@@ -50,11 +45,8 @@ function CreateCell (props) {
   })
 
   function arrangeShips() {
-    //let cloneBoard = Object.assign(Object.create(Object.getPrototypeOf(props.state.player)), props.state.player);
     let cloneBoard = cloneObj(props.state.player);
     cloneBoard.placeShips(props.index);
-
-    //console.log()
 
     let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
     
@@ -70,7 +62,6 @@ function CreateCell (props) {
     let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
 
     cloneBoard.addCellsIntoHoveredCells(findElem, props.index);
-    console.log(cloneBoard)
     props.state.func(cloneBoard);
   }
 
@@ -83,7 +74,6 @@ function CreateCell (props) {
 }
 
 function comprasionOfProps(prevProps, nextProps) {
-  //return false;
   const nextPlayer = nextProps.state.player;
   const prevPlayer = prevProps.state.player;
 

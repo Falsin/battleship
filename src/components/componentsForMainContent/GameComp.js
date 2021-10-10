@@ -14,6 +14,8 @@ export default function Game() {
   const [humanPlayer, setHumanPlayer] = useState(Player());
   const [botPlayer, setBotPlayer] = useState(Robot());
 
+  console.log(humanPlayer)
+
   return (
     <Wrapper>
       <div id='gameBoards'>

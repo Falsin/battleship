@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import uniqid from 'uniqid';
-//import gameBoard from '../../../factoriesFunc/gameBoard';
+import React from 'react';
 import styled from "styled-components";
 import Cell from './Cell';
-import { useEffect } from 'react';
 import cloneObj from '../../../factoriesFunc/cloneObj';
 
 const Wrapper = styled.div`
@@ -44,16 +41,5 @@ export default function Board(props) {
         {createBoardTemplate(100)}
       </div>
     </Wrapper>
-  
-   /*  <Wrapper>
-      {(props.isHuman) ? <button onClick={() => {
-        let cloneState = Object.assign({}, board);
-        cloneState.changeOrientation();
-        setBoard(cloneState);
-      }}>axis: {board.orientation === 'horizontal' ? 'X' : 'Y'}</button> : null}
-      <div>
-        {createBoardTemplate(100)}
-      </div>
-    </Wrapper> */
   )
 }

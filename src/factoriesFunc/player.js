@@ -11,23 +11,20 @@ const Player = (() => {
   let savedName = null;
 
   return function () {
-    const name = savedName;
     const prototype = templateObjForPlayers();
+    const name = savedName;
+    const isActive = true;
 
-    function setName(selectedName) {
-      savedName = selectedName;
-      this.name = selectedName;
-    }
-
-    return Object.assign(Object.create(prototype), {name, setName});
+    return Object.assign(Object.create(prototype), {name, isActive});
   }
 })()
 
 const Robot = () => {
   const prototype = templateObjForPlayers();
-  const name = 'robot'
+  const name = 'robot';
+  const isActive = false;
 
-  return Object.assign(Object.create(prototype), {name});
+  return Object.assign(Object.create(prototype), {name, isActive});
 }
 
 export { Player, Robot }

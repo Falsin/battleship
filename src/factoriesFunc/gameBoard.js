@@ -47,7 +47,7 @@ function gameBoard() {
     let condition = this.selectedCells.find(elem => elem === index);
     let findElem = this.newShipsArray.find(elem => !elem.isPlaced);
 
-    if (condition === undefined) {
+    if (condition === undefined && this.hoveredCells.isValid) {
       const newArr = findElem.shipPart.map((elem, id) => elem.coord = this.hoveredCells.cellsArray[id]);
       this.selectedCells.push(...newArr);
       findElem.isPlaced = true;
@@ -60,7 +60,6 @@ function gameBoard() {
       if (index % 10 + ship.length <= 10) {
 
         if (this.selectedCells.includes(index)) {
-          console.log('work')
           this.hoveredCells.cellsArray = ship.shipPart.map((elem, id) => index + id);
           this.hoveredCells.isValid = false;
         } else {
