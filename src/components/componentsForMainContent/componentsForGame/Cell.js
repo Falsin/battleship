@@ -52,6 +52,7 @@ function CreateCell (props) {
     
     if (!findElem) {
       cloneBoard.isReady = true;
+      cloneBoard.isActive = false;
     }
     props.state.func(cloneBoard);
   }
@@ -74,8 +75,8 @@ function CreateCell (props) {
 }
 
 function comprasionOfProps(prevProps, nextProps) {
-  const nextPlayer = nextProps.state.player;
   const prevPlayer = prevProps.state.player;
+  const nextPlayer = nextProps.state.player;
 
   if (prevPlayer.hoveredCells.cellsArray.includes(nextProps.index) || nextPlayer.hoveredCells.cellsArray.includes(nextProps.index)) {
     return false;

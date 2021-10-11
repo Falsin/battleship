@@ -12,10 +12,17 @@ const Player = (() => {
 
   return function () {
     const prototype = templateObjForPlayers();
-    const name = savedName;
+    let name = savedName;
     const isActive = true;
 
-    return Object.assign(Object.create(prototype), {name, isActive});
+    function setName(selectedName) {
+      name = selectedName;
+      this.name = name;
+      savedName = selectedName;
+      this.name = selectedName;
+    }
+
+    return Object.assign(Object.create(prototype), {name, isActive, setName});
   }
 })()
 

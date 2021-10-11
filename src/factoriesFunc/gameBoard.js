@@ -7,7 +7,6 @@ function gameBoard() {
     cellsArray: [],
     isValid: true,
   }
-  const isReady = false;
 
   const shipsArray = [
     {
@@ -43,11 +42,10 @@ function gameBoard() {
     return this.orientation = (this.orientation === 'vertical') ? 'horizontal' : 'vertical';
   }
 
-  function placeShips(index) {
-    let condition = this.selectedCells.find(elem => elem === index);
+  function placeShips() {
     let findElem = this.newShipsArray.find(elem => !elem.isPlaced);
 
-    if (condition === undefined && this.hoveredCells.isValid) {
+    if (this.hoveredCells.isValid) {
       const newArr = findElem.shipPart.map((elem, id) => elem.coord = this.hoveredCells.cellsArray[id]);
       this.selectedCells.push(...newArr);
       findElem.isPlaced = true;
@@ -59,12 +57,22 @@ function gameBoard() {
     if (this.orientation === 'horizontal') {
       if (index % 10 + ship.length <= 10) {
 
-        if (this.selectedCells.includes(index)) {
-          this.hoveredCells.cellsArray = ship.shipPart.map((elem, id) => index + id);
-          this.hoveredCells.isValid = false;
-        } else {
+        let condition = true;
+
+        for (let i = index; i <= index + ship.length; i++) {
+          console.log()
+          if (this.selectedCells.includes(i)) {
+            condition = false;
+            break;
+          }
+        }
+
+        if (condition) {
           this.hoveredCells.cellsArray = ship.shipPart.map((elem, id) => index + id);
           this.hoveredCells.isValid = true;
+        } else {
+          this.hoveredCells.cellsArray = ship.shipPart.map((elem, id) => index + id);
+          this.hoveredCells.isValid = false;
         }
       } else {
 
@@ -80,12 +88,21 @@ function gameBoard() {
     } else if (this.orientation === 'vertical') {
         if (index + (ship.length * 10 - 10) <= 99) {
 
-          if (this.selectedCells.includes(index)) {
-            this.hoveredCells.cellsArray = ship.shipPart.map((elem, id) => index + (id * 10));
-            this.hoveredCells.isValid = false;
-          } else {
+          let condition = true;
+
+          for (let i = index; i < index + ship.length * 10; i += 10) {
+            if (this.selectedCells.includes(i)) {
+              condition = false;
+              break;
+            }
+          }
+
+          if (condition) {
             this.hoveredCells.cellsArray = ship.shipPart.map((elem, id) => index + (id * 10));
             this.hoveredCells.isValid = true;
+          } else {
+            this.hoveredCells.cellsArray = ship.shipPart.map((elem, id) => index + (id * 10));
+            this.hoveredCells.isValid = false;
           }
 
         } else {
@@ -108,7 +125,6 @@ function gameBoard() {
     addCellsIntoHoveredCells,
     hoveredCells,
     selectedCells,
-    isReady,
     changeOrientation,
     orientation,
   }
