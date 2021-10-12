@@ -42,25 +42,25 @@ function gameBoard() {
     return this.orientation = (this.orientation === 'vertical') ? 'horizontal' : 'vertical';
   }
 
-  function placeShips() {
+  function placeShips(index) {
     let findElem = this.newShipsArray.find(elem => !elem.isPlaced);
 
-    if (this.hoveredCells.isValid) {
+    if (this.hoveredCells.isValid && this.hoveredCells.cellsArray.length) {
       const newArr = findElem.shipPart.map((elem, id) => elem.coord = this.hoveredCells.cellsArray[id]);
       this.selectedCells.push(...newArr);
       findElem.isPlaced = true;
+      this.hoveredCells.cellsArray = [];
+    } else {
+      this.addCellsIntoHoveredCells(findElem, index);
     }
-    this.hoveredCells.cellsArray = [];
   }
 
   function addCellsIntoHoveredCells(ship, index) {
     if (this.orientation === 'horizontal') {
       if (index % 10 + ship.length <= 10) {
-
         let condition = true;
 
         for (let i = index; i <= index + ship.length; i++) {
-          console.log()
           if (this.selectedCells.includes(i)) {
             condition = false;
             break;

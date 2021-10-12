@@ -37,12 +37,11 @@ export default function Board(props) {
       let findShip = clone.newShipsArray.find(elem => !elem.isPlaced);
 
       while (findShip !== undefined) {
-        let arrayOrienttation = ['vertical', 'horizontal']
-        let orientation = arrayOrienttation[randomNumberGenerator(1, 2)];
-        let randomNumber = randomNumberGenerator(1, 100);
-        clone.orientation = orientation;
-        clone.addCellsIntoHoveredCells(findShip, randomNumber);
+        clone.orientation = ['vertical', 'horizontal'][randomNumberGenerator(1, 2)];
+        clone.addCellsIntoHoveredCells(findShip, randomNumberGenerator(1, 100));
         clone.placeShips();
+        clone.isReady = true;
+        //clone.isActive = false;
         findShip = clone.newShipsArray.find(elem => !elem.isPlaced);
         props.func(clone);
       }
@@ -66,14 +65,5 @@ export default function Board(props) {
 
 
 function randomNumberGenerator(minNumber, maxNumber) {
-/*   let minNumber = 1;
-  let maxNumber = 100; */
   return Math.round(minNumber + (maxNumber - minNumber + 1) * Math.random() - 0.5) - 1; 
 }
-
-/* function setRandomOrientation() {
-  let array = ['vertical', 'horizontal'];
-  let minNumber = 1;
-  let maxNumber = 2;
-  return array[Math.round(minNumber + (maxNumber - minNumber + 1) * Math.random() - 0.5) - 1]; 
-} */

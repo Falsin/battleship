@@ -4,7 +4,28 @@ function templateObjForPlayers() {
   const prototype = gameBoard();
   const isReady = false;
 
-  return Object.assign(Object.create(prototype), {isReady});
+  function getDamage(index) {
+    const checkCoord = this.selectedCells.includes(index);
+
+    if (checkCoord) {
+      let requiredElem = null;
+      for (let i = 0; i < this.newShipsArray.length; i++) {
+        let shipPartArray = this.newShipsArray[i].shipPart;
+        requiredElem = shipPartArray.find(elem => elem.coord === index);
+
+        if (requiredElem) {
+          requiredElem.isDamage = true;
+          break
+        }
+
+        //console.log(this.newShipsArray[i].shipPart)
+      }
+      console.log(requiredElem)
+    }
+    //console.log(checkCoord);
+  }
+
+  return Object.assign(Object.create(prototype), {isReady, getDamage});
 }
 
 const Player = (() => {

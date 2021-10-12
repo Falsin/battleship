@@ -17,35 +17,56 @@ function CreateCell (props) {
   const [isError, setIsError]       = useState(false);
   const [isHover, setIsHover]       = useState(false);
 
-  const array = props.state.player.newShipsArray;
   const player = props.state.player;
+  const array = player.newShipsArray;
 
   useEffect(() => {
-    if (player.hoveredCells.cellsArray.includes(props.index)) {
-      if (player.hoveredCells.isValid) {
-        setIsHover(true);
-        setIsError(false);
+    console.log(player.isReady)
+    if (!player.isReady) {
+      if (player.hoveredCells.cellsArray.includes(props.index)) {
+        if (player.hoveredCells.isValid) {
+          setIsHover(true);
+          setIsError(false);
+        } else {
+          setIsError(true);
+        }
       } else {
-        setIsError(true);
+        setIsHover(false);
+        setIsError(false);
+        
+        for (const item of array) {
+          if (item.isPlaced) {
+            let condition = item.shipPart.find(elem => elem.coord === props.index)
+        
+            if (condition) {
+              setIsSelected(true);
+            }
+          }
+        }
       }
     } else {
-      setIsHover(false);
-      setIsError(false);
-      
-      for (const item of array) {
-        if (item.isPlaced) {
-          let condition = item.shipPart.find(elem => elem.coord === props.index)
-      
-          if (condition) {
-            setIsSelected(true);
+      if (player.selectedCells.includes(props.index)) {
+        setIsSelected(true);
+
+        let requiredElem = null;
+        for (let i = 0; i < player.newShipsArray.length; i++) {
+          let shipPartArray = player.newShipsArray[i].shipPart;
+          requiredElem = shipPartArray.find(elem => elem.coord === props.index);
+
+          if (requiredElem && requiredElem.isDamage) {
+            //requiredElem.isDamage = true;
+            //сделать так, чтобы менялся цвет
+            break
           }
+
+          //console.log(this.newShipsArray[i].shipPart)
         }
       }
     }
   })
 
   function arrangeShips() {
-    let cloneBoard = cloneObj(props.state.player);
+    let cloneBoard = cloneObj(player);
     cloneBoard.placeShips(props.index);
 
     let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
@@ -58,7 +79,7 @@ function CreateCell (props) {
   }
 
   function shipHover() {
-    let cloneBoard = cloneObj(props.state.player);
+    let cloneBoard = cloneObj(player);
     
     let findElem = cloneBoard.newShipsArray.find(elem => !elem.isPlaced);
 
@@ -66,9 +87,17 @@ function CreateCell (props) {
     props.state.func(cloneBoard);
   }
 
+  function returnFuncForClick() {
+    if (player.isReady && player.isActive) {
+      return player.getDamage(props.index);
+    } else if (props.isHuman && !player.isReady) {
+      return arrangeShips();
+    }
+  }
+
   return (
     <Square 
-    onClick={() => player.isReady || !props.isHuman ? null : arrangeShips()} 
+    onClick={() => returnFuncForClick()} 
     onMouseEnter={() => player.isReady || !props.isHuman ? null : shipHover()}
     status={{key: isSelected}} error={{key: isError}} hover={{key: isHover}}>{props.index}</Square>
   )
