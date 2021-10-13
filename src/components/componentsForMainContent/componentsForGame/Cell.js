@@ -4,8 +4,11 @@ import cloneObj from "../../../factoriesFunc/cloneObj";
 
 const Square = styled.div`
   background: ${(props) => {
-    return  (props.error.key) ? 'red' : 
+    return  (props.isDamage.key === false) ? 'green' :
+            (props.error.key || props.isDamage.key) ? 'red' : 
             (props.status.key || props.hover.key) ? 'gray' : `rgb(66, 66, 255)`
+    /* (props.error.key || props.isDamage.key) ? 'red' : 
+            (props.status.key || props.hover.key) ? 'gray' : `rgb(66, 66, 255)` */
   }};
   border: solid white 1px;
 `;
@@ -16,12 +19,12 @@ function CreateCell (props) {
   const [isSelected, setIsSelected] = useState(false);
   const [isError, setIsError]       = useState(false);
   const [isHover, setIsHover]       = useState(false);
+  const [isDamage, setIsDamage]     = useState(null);
 
   const player = props.state.player;
   const array = player.newShipsArray;
 
   useEffect(() => {
-    console.log(player.isReady)
     if (!player.isReady) {
       if (player.hoveredCells.cellsArray.includes(props.index)) {
         if (player.hoveredCells.isValid) {
@@ -53,17 +56,20 @@ function CreateCell (props) {
           let shipPartArray = player.newShipsArray[i].shipPart;
           requiredElem = shipPartArray.find(elem => elem.coord === props.index);
 
-          if (requiredElem && requiredElem.isDamage) {
-            //requiredElem.isDamage = true;
-            //сделать так, чтобы менялся цвет
+          if (requiredElem && requiredElem.isDamage && !isDamage) {
+            setIsDamage(true);
             break
           }
-
-          //console.log(this.newShipsArray[i].shipPart)
         }
       }
     }
   })
+
+  useEffect(() => {
+    if (props.coordOfAttack) {
+      player.getDamage(props, setIsDamage);
+    }
+  }, [props.coordOfAttack])
 
   function arrangeShips() {
     let cloneBoard = cloneObj(player);
@@ -77,6 +83,8 @@ function CreateCell (props) {
     }
     props.state.func(cloneBoard);
   }
+  
+  //console.log('work')
 
   function shipHover() {
     let cloneBoard = cloneObj(player);
@@ -89,7 +97,7 @@ function CreateCell (props) {
 
   function returnFuncForClick() {
     if (player.isReady && player.isActive) {
-      return player.getDamage(props.index);
+      return player.getDamage(props, setIsDamage);
     } else if (props.isHuman && !player.isReady) {
       return arrangeShips();
     }
@@ -99,7 +107,7 @@ function CreateCell (props) {
     <Square 
     onClick={() => returnFuncForClick()} 
     onMouseEnter={() => player.isReady || !props.isHuman ? null : shipHover()}
-    status={{key: isSelected}} error={{key: isError}} hover={{key: isHover}}>{props.index}</Square>
+    status={{key: isSelected}} error={{key: isError}} isDamage={{key: isDamage}} hover={{key: isHover}}>{props.index}</Square>
   )
 }
 
@@ -107,9 +115,11 @@ function comprasionOfProps(prevProps, nextProps) {
   const prevPlayer = prevProps.state.player;
   const nextPlayer = nextProps.state.player;
 
-  if (prevPlayer.hoveredCells.cellsArray.includes(nextProps.index) || nextPlayer.hoveredCells.cellsArray.includes(nextProps.index)) {
+  if (nextProps.coordOfAttack) {
     return false;
-  } else if (prevPlayer.isReady !== nextPlayer.isReady) {
+  } else if (prevPlayer.hoveredCells.cellsArray.includes(nextProps.index) || nextPlayer.hoveredCells.cellsArray.includes(nextProps.index)) {
+    return false;
+  } else if (prevPlayer.isReady !== nextPlayer.isReady || prevPlayer.isActive !== nextPlayer.isActive) {
     return false
   } else if (prevPlayer.orientation !== nextPlayer.orientation) {
     return false;

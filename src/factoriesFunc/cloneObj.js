@@ -14,24 +14,9 @@ function cloneObj(item) {
 
     for (const key in item) {
       if (Object.hasOwnProperty.call(item, key)) {
-        //const element = object[key];
         cloneElem[key] = cloneObj(item[key]);
       }
     }
-
-    /* cloneElem = Object.create(Object.getPrototypeOf(item));
-
-    for (const key in item) {
-      if (Object.hasOwnProperty.call(item, key)) {
-        //const element = object[key];
-        cloneElem[key] = cloneObj(item[key]);
-      } else {
-        console.log(Object.getPrototypeOf(item))
-      }
-    } */
-    /* for (const key in item) {
-      cloneElem[key] = cloneObj(item[key]);
-    } */
   } else {
     cloneElem = item;
   }

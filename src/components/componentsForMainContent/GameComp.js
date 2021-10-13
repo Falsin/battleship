@@ -11,10 +11,6 @@ const Wrapper = styled.div`
   }
 `;
 
-/* function gameLoop() {
-  let 
-} */
-
 export default function Game() {
   const [humanPlayer, setHumanPlayer] = useState(Player());
   const [botPlayer, setBotPlayer] = useState(Robot());
@@ -38,8 +34,8 @@ export default function Game() {
   return (
     <Wrapper>
       <div id='gameBoards'>
-        <Board player={humanPlayer} func={setHumanPlayer} isHuman /* enemyState={{botPlayer, func: setBotPlayer}} */ />
-        <Board player={botPlayer} func={setBotPlayer} /* enemyState={{humanPlayer, func: setHumanPlayer}} */ />
+        <Board player={humanPlayer} func={setHumanPlayer} isHuman />
+        <Board player={botPlayer} func={setBotPlayer} />
       </div>
     </Wrapper>
   )
