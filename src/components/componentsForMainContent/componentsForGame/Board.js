@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Cell from './Cell';
 import cloneObj from '../../../factoriesFunc/cloneObj';
 import { useEffect, useState } from 'react/cjs/react.development';
-import iniqid from 'uniqid';
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,6 +20,8 @@ const Wrapper = styled.div`
 `;
 
 export default function Board(props) {
+  const [coordOfAttack, setCoordOfAttack] = useState(null);
+
   const state = {
     player: props.player, 
     func: props.func
@@ -51,14 +52,47 @@ export default function Board(props) {
     }
   }, []);
 
-  const [coordOfAttack, setCoordOfAttack] = useState(null);
-
   useEffect(() => {
     if (props.isHuman && props.player.isActive && props.player.isReady) {
-      //setCoordOfAttack(randomNumberGenerator(1, 100));
-      setCoordOfAttack(50);
+      let clone = cloneObj(props.player);
+      let coord = randomNumberGenerator(1, 100);
+
+      if (clone.attackedCells.includes(coord)) {
+        while (clone.attackedCells.includes(coord) === true) {
+          coord = randomNumberGenerator(1, 100);
+        }
+      }
+
+      setCoordOfAttack(coord);
+      clone.attackedCells.push(coord);
+      props.func(clone)
     }
-  }, [props.player.isActive])
+  }, [props.player.isActive]);
+
+  useEffect(() => {
+    let clone = cloneObj(props.player);
+
+    for (const elem of clone.newShipsArray) {
+      let filter = elem.shipPart.filter(elem => elem.isDamage === true);
+
+      if (filter.length === elem.length) {
+        elem.destroyed = true;
+      }
+    }
+
+    const filter = clone.newShipsArray.find(elem => elem.destroyed === false);
+    const prototype = Object.getPrototypeOf(clone);
+
+
+    if (!filter && !prototype.isGameOver) {
+      prototype.isGameOver = true;
+      clone.isLose = true;
+      //console.log(clone)
+      props.func(clone);
+      
+      //console.log(clone.name + ' lose')
+    }
+  })
 
   return (
     <Wrapper>

@@ -3,6 +3,7 @@ import ship from "./ship";
 function gameBoard() {
   const orientation = 'horizontal';
   const selectedCells = [];
+  const attackedCells = [];
   const hoveredCells = {
     cellsArray: [],
     isValid: true,
@@ -12,22 +13,27 @@ function gameBoard() {
     {
       name: 'carrier',
       length: 5,
+      destroyed: false,
     },
     {
       name: 'battleship',
       length: 4,
+      destroyed: false,
     },
     {
       name: 'Cruiser',
       length: 3,
+      destroyed: false,
     },
     {
       name: 'submarine',
       length: 3,
+      destroyed: false,
     },
     {
       name: 'destroyer',
       length: 2,
+      destroyed: false,
     },
   ]
 
@@ -127,6 +133,7 @@ function gameBoard() {
     selectedCells,
     changeOrientation,
     orientation,
+    attackedCells,
   }
 }
 

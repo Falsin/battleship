@@ -4,6 +4,8 @@ import gameBoard from "./gameBoard";
 function templateObjForPlayers() {
   const prototype = gameBoard();
   const isReady = false;
+  const isGameOver = false;
+  const isLose = false;
 
   function getDamage(props, func) {
     const clone = cloneObj(props.state);
@@ -18,8 +20,14 @@ function templateObjForPlayers() {
         if (requiredElem) {
           clone.player.isActive = false;
           requiredElem.isDamage = true;
+          /* const filter = shipPartArray.filter(elem => elem.isDamage === true);
+
+          if (filter === clone.player.newShipsArray[i].length) {
+            clone.player.newShipsArray[i].destroyed = true;
+          } */
+
           props.state.func(clone.player);
-          break
+          break;
         }
       }
     } else {
@@ -29,31 +37,7 @@ function templateObjForPlayers() {
     }
   }
 
-  /* function getDamageFromBot(props, index) {
-    const clone = cloneObj(props);
-    const checkCoord = this.selectedCells.includes(index);
-
-    if (checkCoord) {
-      let requiredElem = null;
-      for (let i = 0; i < clone.player.newShipsArray.length; i++) {
-        let shipPartArray = clone.player.newShipsArray[i].shipPart;
-        requiredElem = shipPartArray.find(elem => elem.coord === props.index);
-
-        if (requiredElem) {
-          clone.player.isActive = false;
-          requiredElem.isDamage = true;
-          props.state.func(clone.player);
-          break
-        }
-      }
-    } else {
-      clone.player.isActive = false;
-      props.func(false);
-      props.state.func(clone.player);
-    }
-  } */
-
-  return Object.assign(Object.create(prototype), {isReady, getDamage});
+  return Object.assign(Object.create(prototype), {isReady, getDamage, isGameOver, isLose});
 }
 
 const Player = (() => {

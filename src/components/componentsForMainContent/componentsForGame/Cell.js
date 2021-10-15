@@ -83,8 +83,6 @@ function CreateCell (props) {
     }
     props.state.func(cloneBoard);
   }
-  
-  //console.log('work')
 
   function shipHover() {
     let cloneBoard = cloneObj(player);
@@ -96,7 +94,9 @@ function CreateCell (props) {
   }
 
   function returnFuncForClick() {
-    if (player.isReady && player.isActive) {
+    if (isDamage !== null || player.isGameOver) {
+      return null;
+    } else if (player.isReady && player.isActive) {
       return player.getDamage(props, setIsDamage);
     } else if (props.isHuman && !player.isReady) {
       return arrangeShips();
