@@ -7,8 +7,6 @@ const Square = styled.div`
     return  (props.isDamage.key === false) ? 'green' :
             (props.error.key || props.isDamage.key) ? 'red' : 
             (props.status.key || props.hover.key) ? 'gray' : `rgb(66, 66, 255)`
-    /* (props.error.key || props.isDamage.key) ? 'red' : 
-            (props.status.key || props.hover.key) ? 'gray' : `rgb(66, 66, 255)` */
   }};
   border: solid white 1px;
 `;
@@ -51,10 +49,9 @@ function CreateCell (props) {
       if (player.selectedCells.includes(props.index)) {
         setIsSelected(true);
 
-        let requiredElem = null;
         for (let i = 0; i < player.newShipsArray.length; i++) {
           let shipPartArray = player.newShipsArray[i].shipPart;
-          requiredElem = shipPartArray.find(elem => elem.coord === props.index);
+          let requiredElem = shipPartArray.find(elem => elem.coord === props.index);
 
           if (requiredElem && requiredElem.isDamage && !isDamage) {
             setIsDamage(true);

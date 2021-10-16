@@ -3,6 +3,7 @@ import Board from './componentsForGame/Board'
 import { Player, Robot } from "../../factoriesFunc/player";
 import { useEffect, useState } from "react";
 import cloneObj from "../../factoriesFunc/cloneObj";
+import GameOver from "./componentsForGame/gameOver";
 
 const Wrapper = styled.div`
   #gameBoards {
@@ -12,49 +13,23 @@ const Wrapper = styled.div`
   }
 `;
 
-const GameOver = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-`
-
-export default function Game() {
+export default function Game(props) {
   const [humanPlayer, setHumanPlayer] = useState(Player());
   const [botPlayer, setBotPlayer] = useState(Robot());
+  const [loserName, setLoserName] = useState(null);
+
+  useActiveStatus(botPlayer, [humanPlayer, setHumanPlayer]);
+  useActiveStatus(humanPlayer, [botPlayer, setBotPlayer]);
 
   useEffect(() => {
-    if (!humanPlayer.isActive) {
-      let clone = cloneObj(botPlayer);
-      clone.isActive = true;
-      setBotPlayer(clone);
-    }
-  }, [humanPlayer.isActive]);
-
-  useEffect(() => {
-    if (!botPlayer.isActive) {
-      let clone = cloneObj(humanPlayer);
-      clone.isActive = true;
-      setHumanPlayer(clone);
-    }
-  }, [botPlayer.isActive]);
-
-  /* useEffect(() => {
-    console.log(humanPlayer)
-    //let clone = cloneObj(humanPlayer);
-    //console.log(clone === humanPlayer)
-    //setHumanPlayer(clone)
-    //console.log(humanPlayer.isGameOver)
-  }, [humanPlayer.isGameOver]);
-  //console.log(humanPlayer.isGameOver) */
-
-  useEffect(() => {
-    //console.log(botPlayer)
     if (botPlayer.isGameOver) {
       let clone = cloneObj(botPlayer);
       setBotPlayer(clone)
+      setLoserName(clone.name);
     } else if (humanPlayer.isGameOver) {
       let clone = cloneObj(humanPlayer);
-      setBotPlayer(clone)
+      setBotPlayer(clone);
+      setLoserName(clone.name);
     }
   }, [botPlayer.isGameOver, humanPlayer.isGameOver])
 
@@ -63,15 +38,20 @@ export default function Game() {
       <div id='gameBoards'>
         <Board player={humanPlayer} func={setHumanPlayer} isHuman />
         <Board player={botPlayer} func={setBotPlayer} />
+        {(humanPlayer.isGameOver || botPlayer.isGameOver) 
+        ? <GameOver func={props.func} loserName={loserName} /> 
+        : null}
       </div>
-      {console.log(humanPlayer)}
-      {(humanPlayer.isGameOver || botPlayer.isGameOver) ? <GameOver>Game over!</GameOver> : null}
     </Wrapper>
   )
 }
 
-
-function comprasionOfProps(prevProps, nextProps) {
-  return prevProps
-
+function useActiveStatus(obj, args) {
+  useEffect(() => {
+    if (!obj.isActive) {
+      let clone = cloneObj(args[0]);
+      clone.isActive = true;
+      args[1](clone);
+    }
+  }, [obj.isActive])
 }

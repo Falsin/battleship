@@ -12,19 +12,13 @@ function templateObjForPlayers() {
     const checkCoord = this.selectedCells.includes(props.index);
 
     if (checkCoord) {
-      let requiredElem = null;
       for (let i = 0; i < clone.player.newShipsArray.length; i++) {
         let shipPartArray = clone.player.newShipsArray[i].shipPart;
-        requiredElem = shipPartArray.find(elem => elem.coord === props.index);
+        let requiredElem = shipPartArray.find(elem => elem.coord === props.index);
 
         if (requiredElem) {
           clone.player.isActive = false;
           requiredElem.isDamage = true;
-          /* const filter = shipPartArray.filter(elem => elem.isDamage === true);
-
-          if (filter === clone.player.newShipsArray[i].length) {
-            clone.player.newShipsArray[i].destroyed = true;
-          } */
 
           props.state.func(clone.player);
           break;

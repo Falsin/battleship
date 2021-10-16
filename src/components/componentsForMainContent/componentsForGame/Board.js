@@ -83,14 +83,10 @@ export default function Board(props) {
     const filter = clone.newShipsArray.find(elem => elem.destroyed === false);
     const prototype = Object.getPrototypeOf(clone);
 
-
     if (!filter && !prototype.isGameOver) {
       prototype.isGameOver = true;
       clone.isLose = true;
-      //console.log(clone)
       props.func(clone);
-      
-      //console.log(clone.name + ' lose')
     }
   })
 
